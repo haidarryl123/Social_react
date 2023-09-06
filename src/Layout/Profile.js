@@ -1,6 +1,6 @@
 
 import {ProfilePost} from "./Components/ProfilePost";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {getWallAsync} from "../Redux/Slice/AuthReducer";
@@ -8,6 +8,7 @@ import React from "react";
 
 const Profile = () => {
     const dispatch = useDispatch();
+    const auth = useSelector((state) => state.auth.user);
     const wall = useSelector((state) => state.auth.wall);
     const { id } = useParams();
     const endpoint = "http://127.0.0.1:8000";
@@ -33,10 +34,10 @@ const Profile = () => {
                             <div className="text-center">
                                 {wall && (<img className="profile-user-img img-fluid img-circle"
                                                src={endpoint + wall.user.photo}
-                                               style={{height: '100px'}} />)}
+                                               style={{height: '100px',objectFit: 'cover'}} />)}
                                 {!wall && (<img className="profile-user-img img-fluid img-circle"
                                                src="http://127.0.0.1:8000/storage/images/1677853521.jpg"
-                                               style={{height: '100px'}} />)}
+                                               style={{height: '100px',objectFit: 'cover'}} />)}
                             </div>
 
                             {wall && (<h3 className="profile-username text-center">{wall.user.name + " " + wall.user.last_name}</h3>)}
@@ -53,8 +54,13 @@ const Profile = () => {
                                     <b>Friends</b> <a className="float-right">13,287</a>
                                 </li>
                             </ul>
-
-                            <button className="btn btn-primary btn-block"><b>Follow</b></button>
+                            {(auth && auth.id == id) &&
+                                (
+                                    <Link to={"/create-post"}>
+                                        <button className="btn btn-primary btn-block"><b>Post something!</b></button>
+                                    </Link>
+                                )
+                            }
                         </div>
                     </div>
 
@@ -69,25 +75,28 @@ const Profile = () => {
                                 {!wall && ("example@gmail.com")}
                             </p>
                             <hr/>
-                            <strong><i className="fas fa-book mr-1"/> Education</strong>
+                            <strong><i className="fas fa-book mr-1"/> First Name</strong>
                             <p className="text-muted">
-                                B.S. in Computer Science from the University of Tennessee at Knoxville
+                                {wall && (wall.user.name)}
+                                {!wall && ("John")}
                             </p>
                             <hr/>
-                            <strong><i className="fas fa-map-marker-alt mr-1"/> Location</strong>
-                            <p className="text-muted">Malibu, California</p>
-                            <hr/>
-                            <strong><i className="fas fa-pencil-alt mr-1"/> Skills</strong>
+                            <strong><i className="fas fa-map-marker-alt mr-1"/> Last Name</strong>
                             <p className="text-muted">
-                                <span className="tag tag-danger">UI Design | </span>
-                                <span className="tag tag-success">Coding | </span>
-                                <span className="tag tag-info">Javascript | </span>
-                                <span className="tag tag-warning">PHP | </span>
-                                <span className="tag tag-primary">Node.js</span>
+                                {wall && (wall.user.last_name)}
+                                {!wall && ("Doe")}
                             </p>
-                            <hr />
-                            <strong><i className="far fa-file-alt mr-1"/> Notes</strong>
-                            <p className="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+
+                            {auth.id == id &&
+                                (
+                                    <>
+                                        <hr />
+                                        <Link to={"/update-info"}>
+                                            <button className="btn btn-primary btn-block"><b>Update your info</b></button>
+                                        </Link>
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
                 </div>
@@ -97,9 +106,15 @@ const Profile = () => {
                             <div className="tab-content">
                                 <div className="active tab-pane" id="activity">
 
-                                    {posts.map((post) => (
+                                    {posts.length > 0 && posts.map((post) => (
                                         <ProfilePost key={post.id} post={post} user={wall.user} />
                                     ))}
+
+                                    {posts.length === 0 && (
+                                        <>
+                                            <div className="text-center">There are no posts yet.</div>
+                                        </>
+                                    )}
 
                                 </div>
                             </div>

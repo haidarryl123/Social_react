@@ -53,7 +53,7 @@ const Register = () => {
             const decoded = jwt_decode(token);
             localStorage.setItem('userData', JSON.stringify(decoded));
 
-            dispatch(login(response.data));
+            //dispatch(login(response.data));
             navigate('/');
         } else {
             setError(response.message);

@@ -38,6 +38,13 @@ const AuthReducer = createSlice({
                 state.user = response.data.user;
                 state.access_token = response.data.token;
             }
+        }).addCase(postRegisterAsync.fulfilled, (state, action) => {
+            let response = action.payload;
+            if (response.success){
+                state.isAuthenticated = true;
+                state.user = response.data.user;
+                state.access_token = response.data.token;
+            }
         }).addCase(getWallAsync.fulfilled, (state, action) => {
             let response = action.payload;
             if (response.success){
@@ -47,6 +54,11 @@ const AuthReducer = createSlice({
             let response = action.payload;
             if (response.success){
                 state.wall.post = state.wall.post.filter((p) => p.id !== response.data);
+            }
+        }).addCase(updateProfile.fulfilled, (state, action) => {
+            let response = action.payload;
+            if (response.success){
+                state.user = response.data;
             }
         })
     }
@@ -87,6 +99,13 @@ export const deletePostOnWall = createAsyncThunk(
     }
 );
 
-export const { login, logout } = AuthReducer.actions;
+export const updateProfile = createAsyncThunk(
+    "profile/save",
+    async (data) => {
+        return await api.updateProfile(data);
+    }
+);
+
+export const { logout } = AuthReducer.actions;
 
 export default AuthReducer.reducer;

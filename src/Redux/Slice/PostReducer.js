@@ -92,7 +92,7 @@ const PostReducer = createSlice({
                 state.error = action.error.message;
             })
             .addCase(createPostAsync.fulfilled, (state, action) => {
-                state.posts.push(action.payload);
+                state.posts.push(action.payload.data);
                 state.error = null;
             })
 

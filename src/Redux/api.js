@@ -49,6 +49,17 @@ export const getWall = async (userId) => {
     return await response.json();
 };
 
+export const updateProfile = async (data) => {
+    const response = await fetch(`${apiEndpoint}/auth/profile/save`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        body: data
+    });
+    return await response.json();
+};
+
 //post
 export const getPosts = async () => {
     token = localStorage.getItem('jwtToken');
@@ -78,10 +89,9 @@ export const createPost = async (post) => {
     const response = await fetch(`${apiEndpoint}/post/create`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(post)
+        body: post
     });
     return await response.json();
 };

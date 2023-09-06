@@ -22,7 +22,7 @@ const ProfilePost = ({post,user}) => {
         <>
             <div className="post">
                 <div className="user-block">
-                    <img className="img-circle img-bordered-sm" src={endpoint + user.photo} alt="user image"/>
+                    <img className="img-circle img-bordered-sm" src={endpoint + user.photo} alt="user image" style={{objectFit: 'cover'}} />
                     <span className="username">
                         <span>{user.name + " " + user.last_name}</span>
                         {post.user_id === authId && (<span onClick={handleDeletePost} className="float-right btn-tool" style={{cursor: "pointer"}}><i className="fas fa-trash"/></span>)}

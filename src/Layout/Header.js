@@ -58,6 +58,14 @@ const Header = () => {
                         </li>
                     )}
                 </ul>
+
+                {isAuthenticated && (
+                    <ul className="navbar-nav ml-auto">
+                        <li className="nav-item mr-2">
+                            Hello, {user.name + ' ' + user.last_name}
+                        </li>
+                    </ul>
+                )}
             </nav>
         </>
     );
