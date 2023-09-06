@@ -87,7 +87,7 @@ const Profile = () => {
                                 {!wall && ("Doe")}
                             </p>
 
-                            {auth.id == id &&
+                            {(auth && auth.id == id) &&
                                 (
                                     <>
                                         <hr />
